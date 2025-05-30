@@ -15,7 +15,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_name("creds.json", scope)
 client = gspread.authorize(creds)
 
 # Open the sheet (use exact sheet name)
-sheet = client.open("Tracking Log").sheet1
+sheet = client.open("ReviewTrackerLog").sheet1
 
 @app.route('/track')
 def track():

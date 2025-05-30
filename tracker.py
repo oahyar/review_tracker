@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect
 from datetime import datetime
+from pytz import timezone
 import os
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
@@ -21,10 +22,13 @@ sheet = client.open("ReviewTrackerLog").sheet1
 def track():
     ip = request.remote_addr
     user_agent = request.headers.get('User-Agent')
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    sg = timezone('Asia/Singapore')
+    timestamp = datetime.now(sg).strftime("%Y-%m-%d %H:%M:%S")
 
     # Append to sheet
-    sheet.append_row([timestamp, ip, user_agent])
+    method = request.method
+    path = request.path
+    sheet.append_row([timestamp, ip, user_agent, method, path])
 
     # Redirect to final destination
     return redirect(FINAL_URL)
